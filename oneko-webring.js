@@ -20,7 +20,7 @@
   const nekoSites = [
     "localhost",
   ];
-
+  
   try {
     const searchParams = location.search
       .replace("?", "")
@@ -41,11 +41,18 @@
   }
 
   function onClick(event) {
-    const target = event.target.closest("A");
-    if (target === null || !target.getAttribute("href")) {
+    let target;
+    if (event.target.tagName === "A" && event.target.getAttribute("href")) {
+      target = event.target;
+    } else if (
+      event.target.tagName == "IMG" &&
+      event.target.parentElement.tagName === "A" &&
+      event.target.parentElement.getAttribute("href")
+    ) {
+      target = event.target.parentElement;
+    } else {
       return;
     }
-
     let newLocation;
     try {
       newLocation = new URL(target.href);
